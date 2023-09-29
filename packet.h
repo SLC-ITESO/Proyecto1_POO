@@ -1,12 +1,13 @@
 /*
  * packet.h
- *
  *  Created on: Sep 21, 2023
  *      Author: diegogilbert
  */
 
 #ifndef PACKET_H_
 #define PACKET_H_
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef enum { IN_IN, IN_OUT, OUT_IN } Direction;
 typedef enum { IGMP, TCP, UDP } Protocol;
@@ -35,5 +36,6 @@ Packet* createPackets(int N) {
 	}
 	return packetArray;
 }
+
 
 #endif /* PACKET_H_ */
