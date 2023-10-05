@@ -5,7 +5,7 @@
  *  Autores:
  *      Santiago LÃ³pez  744857
  *      Ricardo Soberanis 745306
- *       -
+ *      Isaac Vasquez 745369
  *
  */
 
@@ -40,6 +40,24 @@ int main() {
     printf("IN_OUT: %d\n", c2);
     printf("OUT_IN: %d\n", c3);
     printf("Most frequent direction: %s\n", (mostFrequentDirection == IN_IN) ? "IN_IN" : (mostFrequentDirection == IN_OUT) ? "IN_OUT" : "OUT-OUT");
+
+    //Reto 3
+    
+    Packet packet1 = {100, "192.168.1.1"};
+    Packet packet2 = {50, "192.168.1.2"};
+
+
+    CompareFunc funcPtr;
+
+    funcPtr = compareBytes;
+
+    int result = funcPtr(&packet1, &packet2);
+    printf("ComparaciÃ³n por bytes: %d\n", result);
+
+    funcPtr = compareIP;
+
+    result = funcPtr(&packet1, &packet2);
+    printf("ComparaciÃ³n por IP: %d\n", result);
 }
 
 //Reto 1. Implementa una funciÃ³n llamada countDirections
