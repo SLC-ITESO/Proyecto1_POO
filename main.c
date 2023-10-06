@@ -11,7 +11,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "packet.h"
+
+//Reto 3. Define un tipo de dato CompareFunc
+typedef int (*CompareFunc)(Packet*, Packet*);
 
 Direction countDirections(Packet *packets, int n, int *pInt, int *pInt1, int *pInt2);
 
@@ -23,14 +27,14 @@ void insertionSort(Packet* packets, int N, CompareFunc compare1, CompareFunc com
 
 void insertionSort1(Packet* packets, int N, CompareFunc compare1, CompareFunc compare2);
 
-//Reto 3. Define un tipo de dato CompareFunc
-typedef int (*CompareFunc)(Packet*, Packet*);
+void printPackets(Packet* packets, int N);
+
 
 int main() {
 
     //Reto 2. Crea un arreglo de (al menos) ocho paquetes con datos diversos pero vÃ¡lidos.
     //Invoca al mÃ©todo anterior. Comprueba que los conteos efectuados y la direcciÃ³n devuelta son correctos. 
-    int N = 100;
+    int N = 8;
     Packet* packets = createPackets(N);
     int c1, c2, c3;
 
@@ -43,21 +47,44 @@ int main() {
 
     //Reto 3
     
-    Packet packet1 = {100, "192.168.1.1"};
-    Packet packet2 = {50, "192.168.1.2"};
-
+    Packet packet1 = {0, IN_IN, "192.168.1.1", "", IGMP, 0, 100};
+    Packet packet2 = {0, IN_OUT, "192.168.1.2", "", TCP, 0, 50};
 
     CompareFunc funcPtr;
 
     funcPtr = compareBytes;
 
     int result = funcPtr(&packet1, &packet2);
-    printf("ComparaciÃ³n por bytes: %d\n", result);
+    printf("Comparacion por bytes: %d\n", result);
 
     funcPtr = compareIP;
 
     result = funcPtr(&packet1, &packet2);
-    printf("ComparaciÃ³n por IP: %d\n", result);
+    printf("Comparacion por IP: %d\n", result);
+
+    printf("Packets before sorting:\n");
+    printPackets(packets, N);
+
+    // Utilizar insertionSort:
+    printf("Sorting using insertionSort:\n");
+    insertionSort(packets, N, compareBytes, compareIP);
+    printPackets(packets, N);
+
+    // Para demostrar insertionSort1, vamos a desordenar los paquetes nuevamente:
+    Packet* shuffledPackets = createPackets(N);
+    printf("Shuffled packets before sorting with insertionSort1:\n");
+    printPackets(shuffledPackets, N);
+
+    // Utilizar insertionSort1:
+    printf("Sorting using insertionSort1:\n");
+    insertionSort1(shuffledPackets, N, compareBytes, compareIP);
+    printPackets(shuffledPackets, N);
+
+    // Liberar memoria
+    free(packets);
+    free(shuffledPackets);
+
+
 }
 
 //Reto 1. Implementa una funciÃ³n llamada countDirections
@@ -148,3 +175,10 @@ void insertionSort1(Packet *packets, int N, CompareFunc compare1, CompareFunc co
         *j = key;
     }
 }
+
+void printPackets(Packet* packets, int N) {
+        for (int i = 0; i < N; i++) {
+            printf("Bytes: %u, IP: %s\n", packets[i].bytes, packets[i].sourceIP);
+        }
+        printf("\n");
+    }
